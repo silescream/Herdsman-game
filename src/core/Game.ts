@@ -55,6 +55,7 @@ export class Game {
     const radius = 60;
     const heroX = this.hero.view.x;
     const heroY = this.hero.view.y;
+    const animalsToRemove: Animal[] = [];
 
     followers.forEach((animal, i) => {
       const angle = (2 * Math.PI / followers.length) * i;
@@ -68,8 +69,23 @@ export class Game {
         this.score += 1;
         this.scoreBoard.setScore(this.score);
         this.scene.removeChild(animal.view);
+        animalsToRemove.push(animal);
       }
     });
+
+    if (animalsToRemove.length > 0) {
+      for (const animal of animalsToRemove) {
+        const idx = this.animals.indexOf(animal);
+        if (idx !== -1) {
+          this.animals.splice(idx, 1);
+          const x = Math.random() * 800;
+          const y = Math.random() * 600;
+          const newAnimal = new Animal(x, y);
+          this.animals.push(newAnimal);
+          this.scene.addChild(newAnimal.view);
+        }
+      }
+    }
 
     let currentFollowers = followers.length;
     for (const animal of this.animals) {
