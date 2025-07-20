@@ -5,6 +5,8 @@ import { Hero } from '../entities/Hero';
 import { Yard } from '../entities/Yard';
 import { ScoreBoard } from '../ui/Scoreboard';
 import { Animal } from '../entities/Animal';
+import { TimeController } from '../controllers/TimeController';
+import { eventBus } from '../utils/EventBus';
 
 export class GameScene extends Container implements IScene {
   private hero: Hero;
@@ -14,6 +16,7 @@ export class GameScene extends Container implements IScene {
   private animals: Animal[] = [];
   private sceneWidth: number;
   private sceneHeight: number;
+  private timer: TimeController;
 
   constructor(width: number, height: number) {
     super();
@@ -27,14 +30,21 @@ export class GameScene extends Container implements IScene {
     background.fill();
     this.addChild(background);
 
+    this.scoreBoard = new ScoreBoard(0);
+    this.addChild(this.scoreBoard);
+    
+    this.timer = new TimeController(
+      60,
+      (timeLeft) => this.scoreBoard.setTime(timeLeft),
+      () => this.endGame(),
+    );
+    this.timer.start();
+
     this.hero = new Hero(100, 100);
     this.addChild(this.hero.view);
 
     this.yard = new Yard(700, 500, 60);
     this.addChild(this.yard.view);
-
-    this.scoreBoard = new ScoreBoard(0);
-    this.addChild(this.scoreBoard.view);
 
     this.spawnAnimals(10);
 
@@ -59,10 +69,15 @@ export class GameScene extends Container implements IScene {
     this.hero.moveTo(x, y);
   };
 
-    private update = (deltaTime: number) => {
+  public endGame() {
+    eventBus.emit('gameEnd', this.score);
+  }
+
+  private update = (deltaTime: number) => {
+    this.timer.update(deltaTime);
     this.hero.update(deltaTime);
 
-    const followers = this.animals.filter(a => a.state === 'following');
+    const followers = this.animals.filter(animal => animal.state === 'following');
     const radius = 60;
     const heroX = this.hero.view.x;
     const heroY = this.hero.view.y;

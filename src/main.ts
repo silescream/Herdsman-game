@@ -4,6 +4,7 @@ import { SceneManager } from './utils/SceneManager';
 import { StartScene } from './scenes/StartScene';
 import { eventBus } from './utils/EventBus';
 import { GameScene } from './scenes/GameScene';
+import { EndScene } from './scenes/EndScene';
 
 async function main() {
   const app = new Application();
@@ -13,14 +14,18 @@ async function main() {
   const appHeight = app.screen.height;
 
   SceneManager.init(app);
-  SceneManager.changeScene(new StartScene());
+  SceneManager.changeScene(new StartScene(appWidth, appHeight));
 
   eventBus.on('gameStart', () => {
     SceneManager.changeScene(new GameScene(appWidth, appHeight));
   });
 
   eventBus.on('restartGame', () => {
-    SceneManager.changeScene(new StartScene());
+    SceneManager.changeScene(new StartScene(appWidth, appHeight));
+  });
+
+  eventBus.on('gameEnd', (score) => {
+   SceneManager.changeScene(new EndScene(score, app.screen.width, app.screen.height));
   });
 }
 
