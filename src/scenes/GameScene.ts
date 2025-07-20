@@ -1,54 +1,65 @@
-import { Application, Container } from 'pixi.js';
+import { Container, FederatedPointerEvent, Graphics } from 'pixi.js';
+
+import { SceneManager, type IScene } from '../utils/SceneManager';
 import { Hero } from '../entities/Hero';
-import { Animal } from '../entities/Animal';
 import { Yard } from '../entities/Yard';
 import { ScoreBoard } from '../ui/Scoreboard';
+import { Animal } from '../entities/Animal';
 
-export class Game {
-  private app: Application;
-  private scene: Container;
+export class GameScene extends Container implements IScene {
   private hero: Hero;
-  private animals: Animal[] = [];
   private yard: Yard;
   private score: number = 0;
   private scoreBoard: ScoreBoard;
+  private animals: Animal[] = [];
+  private sceneWidth: number;
+  private sceneHeight: number;
 
-  constructor(app: Application) {
-    this.app = app;
-    this.scene = new Container();
-    this.app.stage.addChild(this.scene);
+  constructor(width: number, height: number) {
+    super();
+
+    this.sceneHeight = height;
+    this.sceneWidth = width;
+
+    const background = new Graphics();
+    background.fill(0x006400);
+    background.roundRect(0, 0, this.sceneWidth, this.sceneHeight);
+    background.fill();
+    this.addChild(background);
 
     this.hero = new Hero(100, 100);
-    this.scene.addChild(this.hero.view);
-    
-    this.app.canvas.addEventListener('pointerdown', this.onPointerDown);
-    this.app.ticker.add((ticker) => this.update(ticker.deltaTime));
-    this.spawnAnimals(10);
+    this.addChild(this.hero.view);
+
     this.yard = new Yard(700, 500, 60);
-    this.scene.addChild(this.yard.view);
+    this.addChild(this.yard.view);
 
     this.scoreBoard = new ScoreBoard(0);
-    this.app.stage.addChild(this.scoreBoard.view);
+    this.addChild(this.scoreBoard.view);
+
+    this.spawnAnimals(10);
+
+    this.eventMode = 'static';
+    this.on('pointerdown', this.onPointerDown);
+    SceneManager.addTicker((ticker) => this.update(ticker.deltaTime));
   }
 
   private spawnAnimals(count: number) {
     for (let i = 0; i < count; i++) {
-      const x = Math.random() * 800;
-      const y = Math.random() * 600;
+      const x = Math.random() * this.sceneWidth;
+      const y = Math.random() * this.sceneHeight;
       const animal = new Animal(x, y);
       this.animals.push(animal);
-      this.scene.addChild(animal.view);
+      this.addChild(animal.view);
     }
   }
 
-  private onPointerDown = (e: PointerEvent) => {
-    const rect = this.app.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+  private onPointerDown = (e: FederatedPointerEvent) => {
+    const x = e.global.x
+    const y = e.global.y;
     this.hero.moveTo(x, y);
   };
 
-  private update = (deltaTime: number) => {
+    private update = (deltaTime: number) => {
     this.hero.update(deltaTime);
 
     const followers = this.animals.filter(a => a.state === 'following');
@@ -62,13 +73,13 @@ export class Game {
       const targetX = heroX + Math.cos(angle) * radius;
       const targetY = heroY + Math.sin(angle) * radius;
       animal.followTo(targetX, targetY);
-      animal.update(deltaTime, 800, 600);
+      animal.update(deltaTime, this.sceneWidth, this.sceneHeight);
 
       if (this.yard.contains(animal.view.x, animal.view.y)) {
         animal.state = 'inYard';
         this.score += 1;
         this.scoreBoard.setScore(this.score);
-        this.scene.removeChild(animal.view);
+        this.removeChild(animal.view);
         animalsToRemove.push(animal);
       }
     });
@@ -78,11 +89,11 @@ export class Game {
         const idx = this.animals.indexOf(animal);
         if (idx !== -1) {
           this.animals.splice(idx, 1);
-          const x = Math.random() * 800;
-          const y = Math.random() * 600;
+          const x = Math.random() * this.sceneWidth;
+          const y = Math.random() * this.sceneHeight;
           const newAnimal = new Animal(x, y);
           this.animals.push(newAnimal);
-          this.scene.addChild(newAnimal.view);
+          this.addChild(newAnimal.view);
         }
       }
     }
@@ -90,7 +101,7 @@ export class Game {
     let currentFollowers = followers.length;
     for (const animal of this.animals) {
       if (animal.state === 'idle') {
-        animal.update(deltaTime, 800, 600);
+        animal.update(deltaTime, this.sceneWidth, this.sceneHeight);
         const added = animal.tryFollow(this.hero.view.x, this.hero.view.y, currentFollowers, 5);
         if (added) currentFollowers++;
       }
