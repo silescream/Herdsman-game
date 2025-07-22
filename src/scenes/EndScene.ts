@@ -4,6 +4,8 @@ import type { IScene } from '../utils/SceneManager';
 import { eventBus } from '../utils/EventBus';
 
 export class EndScene extends Container implements IScene {
+  private restartButton: Graphics;
+
   constructor(finalScore: number, width: number = 800, height: number = 600) {
     super();
 
@@ -30,13 +32,13 @@ export class EndScene extends Container implements IScene {
     scoreText.y = 108;
     popup.addChild(scoreText);
 
-    const restartButton = new Graphics()
+    this.restartButton = new Graphics()
       .fill(0x44ff44)
       .roundRect(120, 180, 160, 44, 16)
       .fill();
-    restartButton.eventMode = 'static';
-    restartButton.cursor = 'pointer';
-    popup.addChild(restartButton);
+    this.restartButton.eventMode = 'static';
+    this.restartButton.cursor = 'pointer';
+    popup.addChild(this.restartButton);
 
     const buttonText = new Text({
       text: 'Restart',
@@ -46,12 +48,19 @@ export class EndScene extends Container implements IScene {
     buttonText.y = 192;
     popup.addChild(buttonText);
 
-    restartButton.on('pointerdown', () => {
-      eventBus.emit('restartGame');
-    });
+    this.restartButton.on('pointerdown', this.onRestart);
 
     popup.x = (width - 400) / 2;
     popup.y = (height - 250) / 2;
     this.addChild(popup);
+  }
+
+  private onRestart = () => {
+    eventBus.emit('restartGame');
+  };
+
+  public destroyScene(): void {
+    this.restartButton.off('pointerdown', this.onRestart);
+    super.destroy({ children: true });
   }
 }

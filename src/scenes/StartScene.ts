@@ -4,6 +4,8 @@ import type { IScene } from '../utils/SceneManager';
 import { eventBus } from '../utils/EventBus';
 
 export class StartScene extends Container implements IScene {
+  private startButton: Graphics;
+
   constructor(width: number, height: number) {
     super();
     
@@ -31,13 +33,13 @@ export class StartScene extends Container implements IScene {
     description.y = 120;
     popup.addChild(description);
 
-    const startButton = new Graphics()
+    this.startButton = new Graphics()
       .fill(0x44ff44)
       .roundRect(120, 180, 160, 44, 16)
       .fill();
-    startButton.eventMode = 'static';
-    startButton.cursor = 'pointer';
-    popup.addChild(startButton);
+    this.startButton.eventMode = 'static';
+    this.startButton.cursor = 'pointer';
+    popup.addChild(this.startButton);
     
     const buttonText = new Text({
       text: 'Start',
@@ -47,13 +49,20 @@ export class StartScene extends Container implements IScene {
     buttonText.y = 192;
     popup.addChild(buttonText);
 
-    startButton.on('pointerdown', () => {
-      eventBus.emit('gameStart');
-    });
+    this.startButton.on('pointerdown', this.onStart);
 
     popup.x = (width - 400) / 2;
     popup.y = (height - 250) / 2;
 
     this.addChild(popup);
+  }
+
+  private onStart = () => {
+    eventBus.emit('gameStart');
+  };
+
+  public destroyScene(): void{
+    this.startButton.off('pointerdown', this.onStart);
+    super.destroy({ children: true });
   }
 }

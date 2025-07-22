@@ -31,4 +31,8 @@ export class SceneManager {
   public static addTicker(fn: (ticker: Ticker) => void) {
     SceneManager.app.ticker.add(fn);
   }
+
+  public static removeTicker(fn: (ticker: Ticker) => void) {
+    SceneManager.app.ticker.remove(fn);
+  }
 }

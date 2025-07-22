@@ -1,14 +1,17 @@
 import { Container, Text } from 'pixi.js';
 
 export class ScoreBoard extends Container {
+  private score: number = 0;
   private scoreText: Text;
   private timeText: Text;
 
   constructor(initialScore: number = 0, initialTime: number = 60) {
     super();
 
+    this.score = initialScore;
+
     this.scoreText = new Text({
-      text: `Gathered: ${initialScore}`,
+      text: `Gathered: ${this.score}`,
       style: {
           fontFamily: 'Arial',
           fontSize: 24,
@@ -35,7 +38,12 @@ export class ScoreBoard extends Container {
   }
 
   public setScore(score: number) {
-    this.scoreText.text = `Gathered: ${score}`;
+    this.score = score;
+    this.scoreText.text = `Gathered: ${this.score}`;
+  }
+
+  public getScore() {
+    return this.score;
   }
 
   public setTime(timeLeft: number) {
