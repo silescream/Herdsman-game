@@ -13,10 +13,10 @@ export class ScoreBoard extends Container {
     this.scoreText = new Text({
       text: `Gathered: ${this.score}`,
       style: {
-          fontFamily: 'Arial',
-          fontSize: 24,
-          fill: 0xFFFFA0,
-          align: 'center',
+        fontFamily: 'Arial',
+        fontSize: 24,
+        fill: 0xffffa0,
+        align: 'center',
       },
     });
     this.scoreText.x = 32;
@@ -25,16 +25,16 @@ export class ScoreBoard extends Container {
 
     this.timeText = new Text({
       text: `Time left: ${initialTime}`,
-        style: {
+      style: {
         fontFamily: 'Arial',
         fontSize: 24,
-        fill: 0xFFFFA0,
+        fill: 0xffffa0,
         align: 'center',
       },
     });
     this.timeText.x = 32;
     this.timeText.y = 56;
-    this.addChild(this.timeText)
+    this.addChild(this.timeText);
   }
 
   public setScore(score: number) {

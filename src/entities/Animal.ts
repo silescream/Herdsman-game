@@ -15,9 +15,7 @@ export class Animal {
 
   constructor(x: number, y: number, color: number = 0xffffff) {
     this.view = new Graphics();
-    this.view.fill(color)
-      .circle(0, 0, 14)
-      .fill();
+    this.view.fill(color).circle(0, 0, 14).fill();
     this.view.x = x;
     this.view.y = y;
     this.targetX = x;
@@ -41,8 +39,8 @@ export class Animal {
         this.setRandomPatrolTarget(fieldW, fieldH);
       }
 
-      const dx = (this.patrolX! - this.view.x);
-      const dy = (this.patrolY! - this.view.y);
+      const dx = this.patrolX! - this.view.x;
+      const dy = this.patrolY! - this.view.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist > 1) {
@@ -74,7 +72,12 @@ export class Animal {
     this.patrolY = undefined;
   }
 
-  public tryFollow(heroX: number, heroY: number, groupSize: number, maxInGroup: number): boolean {
+  public tryFollow(
+    heroX: number,
+    heroY: number,
+    groupSize: number,
+    maxInGroup: number,
+  ): boolean {
     if (this.state === 'idle' && groupSize < maxInGroup) {
       const dx = heroX - this.view.x;
       const dy = heroY - this.view.y;

@@ -12,7 +12,7 @@ export class SceneManager {
     SceneManager.app = app;
   }
 
-  public static changeScene (scene: IScene) {
+  public static changeScene(scene: IScene) {
     if (SceneManager.currentScene) {
       if (SceneManager.currentScene.destroyScene) {
         SceneManager.currentScene.destroyScene();

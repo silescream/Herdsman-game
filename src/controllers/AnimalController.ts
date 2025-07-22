@@ -15,14 +15,14 @@ export class AnimalController {
   private sceneHeight: number;
   private maxFollowers: number;
 
-  constructor (
+  constructor(
     container: Container,
     hero: Hero,
     yard: Yard,
     scoreBoard: ScoreBoard,
     sceneWidth: number,
     sceneHeight: number,
-    maxFollowers: number = 5
+    maxFollowers: number = 5,
   ) {
     this.container = container;
     this.hero = hero;
@@ -44,14 +44,16 @@ export class AnimalController {
   }
 
   public updateAnimals(deltaTime: number) {
-    const followers = this.animals.filter(animal => animal.state === 'following');
+    const followers = this.animals.filter(
+      (animal) => animal.state === 'following',
+    );
     const radius = 60;
     const heroX = this.hero.view.x;
     const heroY = this.hero.view.y;
     const animalsToRemove: Animal[] = [];
 
     followers.forEach((animal, idx) => {
-      const positionAngle = (2 * Math.PI / followers.length) * idx;
+      const positionAngle = ((2 * Math.PI) / followers.length) * idx;
       const targetX = heroX + Math.cos(positionAngle) * radius;
       const targetY = heroY + Math.sin(positionAngle) * radius;
       animal.followTo(targetX, targetY);
@@ -83,7 +85,12 @@ export class AnimalController {
     for (const animal of this.animals) {
       if (animal.state === 'idle') {
         animal.update(deltaTime, this.sceneWidth, this.sceneHeight);
-        const added = animal.tryFollow(this.hero.view.x, this.hero.view.y, currentFollowers, 5);
+        const added = animal.tryFollow(
+          this.hero.view.x,
+          this.hero.view.y,
+          currentFollowers,
+          5,
+        );
         if (added) currentFollowers++;
       }
     }

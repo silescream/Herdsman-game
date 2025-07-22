@@ -25,7 +25,9 @@ async function main() {
   });
 
   eventBus.on('gameEnd', (score) => {
-   SceneManager.changeScene(new EndScene(score, app.screen.width, app.screen.height));
+    SceneManager.changeScene(
+      new EndScene(score, app.screen.width, app.screen.height),
+    );
   });
 }
 

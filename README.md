@@ -17,6 +17,7 @@
 - If an animal reaches the yard, the score increases.
 
 **Optional Features:**
+
 - Animals can spawn at random intervals and positions (spawn generator).
 - Animals can patrol or move randomly until collected.
 
@@ -67,14 +68,14 @@
 ## OOP / SOLID / Patterns Knowledge (short self-reflection)
 
 - **OOP:** The game is built around clear class-based entities with encapsulated state and behavior.
-- **SOLID:**  
-  - Single Responsibility: Each class (Hero, Animal, Yard, Scoreboard) has only one responsibility.  
+- **SOLID:**
+  - Single Responsibility: Each class (Hero, Animal, Yard, Scoreboard) has only one responsibility.
   - Open/Closed: Entities and controllers can be extended without modifying existing code.
   - Dependency Inversion: Scene controllers interact with entities via public interfaces.
-- **Patterns:**  
+- **Patterns:**
   - Controller pattern for managing game logic.
   - EventBus (where relevant) for decoupled communication between systems.
-- **Architecture:**  
+- **Architecture:**
   - Clean, modular file structure for maintainability and scalability.
   - No “god objects”: logic is separated by domain (entities, controllers, UI).
 
@@ -90,4 +91,3 @@
 ## Author
 
 By Kuznietsov Alex, 2025.
-

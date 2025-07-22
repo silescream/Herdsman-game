@@ -12,9 +12,7 @@ export class Yard {
     this.radius = radius;
 
     this.view = new Graphics();
-    this.view.fill(0xffff33)
-      .circle(0, 0, radius)
-      .fill();
+    this.view.fill(0xffff33).circle(0, 0, radius).fill();
     this.view.x = x;
     this.view.y = y;
   }

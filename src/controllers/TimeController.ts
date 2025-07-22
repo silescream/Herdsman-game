@@ -5,7 +5,11 @@ export class TimeController {
   private onEnd?: () => void;
   private running: boolean = false;
 
-  constructor(totalSeconds: number, onTick: (timeLeft: number) => void, onEnd?: () => void) {
+  constructor(
+    totalSeconds: number,
+    onTick: (timeLeft: number) => void,
+    onEnd?: () => void,
+  ) {
     this.totalTime = totalSeconds;
     this.timeLeft = totalSeconds;
     this.onTick = onTick;
@@ -32,7 +36,6 @@ export class TimeController {
     }
   }
 
-
   public getTimeLeft() {
     return Math.ceil(this.timeLeft);
   }
@@ -40,4 +43,4 @@ export class TimeController {
   public stop() {
     this.running = false;
   }
-} 
+}

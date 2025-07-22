@@ -8,9 +8,7 @@ export class Hero {
 
   constructor(x: number, y: number) {
     this.view = new Graphics();
-    this.view.fill(0xff3333)
-      .circle(0, 0, 20)
-      .fill();
+    this.view.fill(0xff3333).circle(0, 0, 20).fill();
     this.view.x = x;
     this.view.y = y;
     this.targetX = x;

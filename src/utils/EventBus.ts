@@ -10,12 +10,12 @@ export class EventBus {
 
   off<T = any>(event: string, cb: Listener<T>) {
     if (!this.listeners[event]) return;
-    this.listeners[event] = this.listeners[event].filter(fn => fn !== cb);
+    this.listeners[event] = this.listeners[event].filter((fn) => fn !== cb);
   }
 
   emit<T = any>(event: string, payload?: T) {
     if (!this.listeners[event]) return;
-    this.listeners[event].forEach(cb => cb(payload));
+    this.listeners[event].forEach((cb) => cb(payload));
   }
 }
 

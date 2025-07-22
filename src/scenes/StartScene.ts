@@ -8,7 +8,7 @@ export class StartScene extends Container implements IScene {
 
   constructor(width: number, height: number) {
     super();
-    
+
     const popup = new Container();
 
     const background = new Graphics()
@@ -19,7 +19,7 @@ export class StartScene extends Container implements IScene {
 
     const title = new Text({
       text: 'Herdsman',
-      style : { fontSize: 36, fill: 0xffffff },
+      style: { fontSize: 36, fill: 0xffffff },
     });
     title.x = 200 - title.width / 2;
     title.y = 50;
@@ -40,7 +40,7 @@ export class StartScene extends Container implements IScene {
     this.startButton.eventMode = 'static';
     this.startButton.cursor = 'pointer';
     popup.addChild(this.startButton);
-    
+
     const buttonText = new Text({
       text: 'Start',
       style: { fontSize: 24, fill: 0x222233 },
@@ -61,7 +61,7 @@ export class StartScene extends Container implements IScene {
     eventBus.emit('gameStart');
   };
 
-  public destroyScene(): void{
+  public destroyScene(): void {
     this.startButton.off('pointerdown', this.onStart);
     super.destroy({ children: true });
   }

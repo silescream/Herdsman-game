@@ -31,7 +31,7 @@ export class GameScene extends Container implements IScene {
 
     this.scoreBoard = new ScoreBoard(0);
     this.addChild(this.scoreBoard);
-    
+
     this.timer = new TimeController(
       60,
       (timeLeft) => this.scoreBoard.setTime(timeLeft),
@@ -46,7 +46,12 @@ export class GameScene extends Container implements IScene {
     this.addChild(this.yard.view);
 
     this.animalController = new AnimalController(
-      this, this.hero, this.yard, this.scoreBoard, this.sceneWidth, this.sceneHeight
+      this,
+      this.hero,
+      this.yard,
+      this.scoreBoard,
+      this.sceneWidth,
+      this.sceneHeight,
     );
 
     this.animalController.spawnAnimals(10);
@@ -57,7 +62,7 @@ export class GameScene extends Container implements IScene {
   }
 
   private onPointerDown = (e: FederatedPointerEvent) => {
-    const x = e.global.x
+    const x = e.global.x;
     const y = e.global.y;
     this.hero.moveTo(x, y);
   };
@@ -74,10 +79,10 @@ export class GameScene extends Container implements IScene {
 
   private pixiUpdate = (ticker: Ticker) => {
     this.update(ticker.deltaTime);
-  } 
+  };
 
   public destroyScene(): void {
     this.off('pointerdown', this.onPointerDown);
-    SceneManager.removeTicker(this.pixiUpdate)
+    SceneManager.removeTicker(this.pixiUpdate);
   }
 }
