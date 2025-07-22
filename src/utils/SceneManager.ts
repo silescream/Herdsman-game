@@ -24,10 +24,6 @@ export class SceneManager {
     SceneManager.app.stage.addChild(scene);
   }
 
-  public getCurrentScene(): IScene | null {
-    return SceneManager.currentScene;
-  }
-
   public static addTicker(fn: (ticker: Ticker) => void) {
     SceneManager.app.ticker.add(fn);
   }

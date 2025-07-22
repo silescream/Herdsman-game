@@ -89,7 +89,7 @@ export class AnimalController {
           this.hero.view.x,
           this.hero.view.y,
           currentFollowers,
-          5,
+          this.maxFollowers,
         );
         if (added) currentFollowers++;
       }
